@@ -3,9 +3,16 @@ use clap::Parser;
 use colored::Colorize;
 use get_shell::get_shell_name;
 
-#[derive(Parser)]
+#[derive(Parser, Debug)]
+#[clap(author = "narusenia",
+       version = "0.1",
+       about = "Magical alternative to the which command.")]
 struct Args {
-    filename: String
+    ///Print all matching pathnames of each argument
+    #[clap(short, long, takes_value = false)]
+    all: bool,
+
+    filename: String,
 }
 
 // You can do the same thing with the {command} command!
@@ -33,6 +40,7 @@ fn main() {
     let args: Args = Args::parse();
                     
     let shell = get_shell_name().unwrap();
+    let all: &str = if args.all { "-a" } else { "" };
     let cmd = if shell == "pwsh" || shell == "cmd" {
         Command::new("pwsh")
                 .arg("-c")
@@ -42,11 +50,12 @@ fn main() {
     } else if shell == "bash" {
         Command::new("which")
                 .arg(&args.filename)
+                .arg(&all)
                 .output()
                 .ok().expect("Error: Failed to run command.")
     } else {
         Command::new("bash")
-                .args(["which", &args.filename])
+                .args(["which", &args.filename, &all])
                 .output()
                 .ok().expect("Error: Failed to run command.")
     };
@@ -58,5 +67,5 @@ fn main() {
 
     if res.trim() == "" { res = "not executable."; }
 
-    print!(witch!(), target = &args.executable.yellow(), where = &res.trim().cyan());
+    print!(witch!(), target = &args.filename.yellow(), where = &res.trim().cyan());
 }
