@@ -9,10 +9,11 @@ use get_shell::get_shell_name;
        about = "Magical alternative to the which command.")]
 struct Args {
     ///Print all matching pathnames of each argument
-    #[clap(short, long, takes_value = false)]
-    all: bool,
-
-    filename: String,
+    //#[clap(short, long, takes_value = false)]
+    //all: bool,
+    
+    #[clap(required = true)]
+    filename: Vec<String>,
 }
 
 // You can do the same thing with the {command} command!
@@ -44,18 +45,18 @@ fn main() {
     let cmd = if shell == "pwsh" || shell == "cmd" {
         Command::new("pwsh")
                 .arg("-c")
-                .arg(format!("Get-Command {} -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Definition", &args.filename))
+                .arg(format!("Get-Command {} -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Definition", &args.filename.first().expect("err!")))
                 .output()
                 .ok().expect("Error: Failed to run command.")
     } else if shell == "bash" {
         Command::new("which")
-                .arg(&args.filename)
+                .arg(&args.filename.first().expect("err!"))
                 .arg(&all)
                 .output()
                 .ok().expect("Error: Failed to run command.")
     } else {
         Command::new("bash")
-                .args(["which", &args.filename, &all])
+                .args(["which", &args.filename.first().expect("err!"), &all])
                 .output()
                 .ok().expect("Error: Failed to run command.")
     };
@@ -67,5 +68,5 @@ fn main() {
 
     if res.trim() == "" { res = "not executable."; }
 
-    print!(witch!(), target = &args.filename.yellow(), where = &res.trim().cyan());
+    print!(witch!(), target = &args.filename.first().expect("err!").yellow(), where = &res.trim().cyan());
 }
