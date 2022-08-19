@@ -9,7 +9,20 @@ Maybe on Windows it could be used as a `which` command! (It takes up a bit of li
 
 ---
 
-## Build
+## Usage
+```
+witch [OPTIONS] <FILENAME>
+```
+Options:
+```
+-a, --all        Print all matching pathnames of each argument
+-h, --help       Print help information
+-V, --version    Print version information
+```
+
+---
+
+## Build / Install
 
 First, clone this repository and move to the directory.
 ```bash
