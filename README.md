@@ -22,20 +22,3 @@ or
 ```bash
 cargo install --path .
 ```
-
-Also, you can install witch like this
-
-**Bash**
-```bash
-sudo cp ./target/release/witch /usr/bin/witch
-```
-
-**Windows(PowerShell)**
-```pwsh
-$ENV:Path+=";path\to\witch\target\release\witch.exe"
-```
-
-**Windows(Cmd)**
-```cmd
-set PATH=%PATH%;path\to\witch\target\release\witch.exe
-```
