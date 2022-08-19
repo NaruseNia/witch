@@ -11,7 +11,7 @@ struct Args {
     ///Print all matching pathnames of each argument
     //#[clap(short, long, takes_value = false)]
     //all: bool,
-    
+
     #[clap(required = true)]
     filename: Vec<String>,
 }
@@ -41,7 +41,6 @@ fn main() {
     let args: Args = Args::parse();
                     
     let shell = get_shell_name().unwrap();
-    let all: &str = if args.all { "-a" } else { "" };
     let cmd = if shell == "pwsh" || shell == "cmd" {
         Command::new("pwsh")
                 .arg("-c")
@@ -51,12 +50,11 @@ fn main() {
     } else if shell == "bash" {
         Command::new("which")
                 .arg(&args.filename.first().expect("err!"))
-                .arg(&all)
                 .output()
                 .ok().expect("Error: Failed to run command.")
     } else {
         Command::new("bash")
-                .args(["which", &args.filename.first().expect("err!"), &all])
+                .args(["which", &args.filename.first().expect("err!")])
                 .output()
                 .ok().expect("Error: Failed to run command.")
     };
