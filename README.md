@@ -37,3 +37,4 @@ or
 ```bash
 cargo install --path .
 ```
+You can also download pre-built things on [Release](https://github.com/NaruseNia/witch/releases/tag/stable).
