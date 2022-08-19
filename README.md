@@ -1,4 +1,4 @@
-# **Witch**
+# **witch**
 ## "Magical alternative to the which command" 
 ![witch_command](https://i.imgur.com/2UnPTs3.png)
 
