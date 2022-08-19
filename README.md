@@ -15,7 +15,6 @@ witch [OPTIONS] <FILENAME>
 ```
 Options:
 ```
--a, --all        Print all matching pathnames of each argument
 -h, --help       Print help information
 -V, --version    Print version information
 ```
@@ -38,3 +37,9 @@ or
 cargo install --path .
 ```
 You can also download pre-built things on [Release](https://github.com/NaruseNia/witch/releases/tag/stable).
+
+---
+
+## TODO
+- Support multiple filenames.
+- Create `--all` option.
