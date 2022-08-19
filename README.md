@@ -5,6 +5,8 @@
 If you've been coding until midnight and accidentally typo'd the `which` command with the `witch` command, no worries!
 A kind **witch** will teach you instead!
 
+Maybe on Windows it could be used as a `which` command! (It takes up a bit of line, though...)
+
 ---
 
 ## Build
