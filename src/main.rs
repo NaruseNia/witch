@@ -5,7 +5,7 @@ use get_shell::get_shell_name;
 
 #[derive(Parser)]
 struct Args {
-    executable: String
+    filename: String
 }
 
 // You can do the same thing with the {command} command!
@@ -36,17 +36,17 @@ fn main() {
     let cmd = if shell == "pwsh" || shell == "cmd" {
         Command::new("pwsh")
                 .arg("-c")
-                .arg(format!("Get-Command {} -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Definition", &args.executable))
+                .arg(format!("Get-Command {} -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Definition", &args.filename))
                 .output()
                 .ok().expect("Error: Failed to run command.")
     } else if shell == "bash" {
         Command::new("which")
-                .arg(&args.executable)
+                .arg(&args.filename)
                 .output()
                 .ok().expect("Error: Failed to run command.")
     } else {
         Command::new("bash")
-                .args(["which", &args.executable])
+                .args(["which", &args.filename])
                 .output()
                 .ok().expect("Error: Failed to run command.")
     };
