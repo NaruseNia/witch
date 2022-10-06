@@ -49,15 +49,9 @@ fn main() {
                 .arg(format!("Get-Command {} -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Definition", &args.filename.first().expect("err!")))
                 .output()
                 .ok().expect("Error: Failed to run command.")
-    } else if shell == "bash" || shell == "zsh" || shell == "fish" {
+    } else {
         Command::new("which")
             .arg(&args.filename.first().expect("err!"))
-            .output()
-            .ok()
-            .expect("Error: Failed to run command.")
-    } else {
-        Command::new("bash")
-            .args(["which", &args.filename.first().expect("err!")])
             .output()
             .ok()
             .expect("Error: Failed to run command.")
