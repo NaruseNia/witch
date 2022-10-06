@@ -1,12 +1,14 @@
-use std::process::Command;
 use clap::Parser;
 use colored::Colorize;
 use get_shell::get_shell_name;
+use std::process::Command;
 
 #[derive(Parser, Debug)]
-#[clap(author = "narusenia",
-       version = "0.1",
-       about = "Magical alternative to the which command.")]
+#[clap(
+    author = "narusenia",
+    version = "0.1",
+    about = "Magical alternative to the which command."
+)]
 struct Args {
     ///Print all matching pathnames of each argument
     //#[clap(short, long, takes_value = false)]
@@ -18,8 +20,8 @@ struct Args {
 
 // You can do the same thing with the {command} command!
 macro_rules! witch {
-() => (
-"
+    () => {
+        "
  ⠀⠀⠀⣠⣦⣄⡀
 ⠀⠀⠀⠴⠛⢻⣿⣿⣷⣦⡀
 ⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣦⡀
@@ -34,12 +36,12 @@ macro_rules! witch {
 ⠀⠀⠈⠙⠶⣶⣾⣷⣿⣜⢮⠛⠧⣿⡿⠋⠁
 ⠀⠀⠀⠀⠀⠀⠀⠉⠛⠛⠈⠛⠛⠁⠀
 "
-)
+    };
 }
 
 fn main() {
     let args: Args = Args::parse();
-                    
+
     let shell = get_shell_name().unwrap();
     let cmd = if shell == "pwsh" || shell == "cmd" {
         Command::new("pwsh")
@@ -47,24 +49,28 @@ fn main() {
                 .arg(format!("Get-Command {} -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Definition", &args.filename.first().expect("err!")))
                 .output()
                 .ok().expect("Error: Failed to run command.")
-    } else if shell == "bash" {
+    } else if shell == "bash" || shell == "zsh" || shell == "fish" {
         Command::new("which")
-                .arg(&args.filename.first().expect("err!"))
-                .output()
-                .ok().expect("Error: Failed to run command.")
+            .arg(&args.filename.first().expect("err!"))
+            .output()
+            .ok()
+            .expect("Error: Failed to run command.")
     } else {
         Command::new("bash")
-                .args(["which", &args.filename.first().expect("err!")])
-                .output()
-                .ok().expect("Error: Failed to run command.")
+            .args(["which", &args.filename.first().expect("err!")])
+            .output()
+            .ok()
+            .expect("Error: Failed to run command.")
     };
-    
+
     let mut res: &str = match std::str::from_utf8(&cmd.stdout) {
         Err(why) => panic!("Error: {}", why),
         Ok(res) => res,
     };
 
-    if res.trim() == "" { res = "not executable."; }
+    if res.trim() == "" {
+        res = "not executable.";
+    }
 
     print!(witch!(), target = &args.filename.first().expect("err!").yellow(), where = &res.trim().cyan());
 }
